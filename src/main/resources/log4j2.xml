@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="off" monitorInterval="300">
+    <properties>
+        <property name="LOG_HOME">Log</property>
+        <property name="FILE_NAME">mylog</property>
+    </properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
+
+        <Console
+                name="sqlConsole"
+                target="SYSTEM_OUT">
+
+            <Filters>
+                <RegexFilter regex=".* select[\s]1.*" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
+
+    </Appenders>
+
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console" />
+        </Root>
+
+        <!-- druid配置 -->
+        <Logger name="druid.sql.Statement" level="debug" additivity="false">
+            <appender-ref ref="sqlConsole"/>
+        </Logger>
+
+        <Logger name="com.alibaba.druid.pool.DruidDataSourceStatLoggerImpl" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+    </Loggers>
+</Configuration>
