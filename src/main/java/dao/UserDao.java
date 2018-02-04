@@ -15,11 +15,16 @@ public class UserDao extends YouDao<User> {
 
     public Integer addUser(User user) throws NoneffectiveUpdateExecuteException {
 
-        modelHandler.saveModel(user);
+        int i = modelHandler.saveModel(user);
 
-        return (Integer) modelHandler.getModelFieldValue("id",
-                YouCollectionsUtils.getYouHashMap("username",user.getUsername()),
-                "AND");
+        if (i == 0) {
+            return null;
+        } else {
+            return (Integer) modelHandler.getModelFieldValue("id",
+                    YouCollectionsUtils.getYouHashMap("username",user.getUsername()),
+                    "AND");
+        }
+
     }
 
     public int updateUser(Integer id, HashMap<String, Object> newFieldValuesMap) throws NoneffectiveUpdateExecuteException {

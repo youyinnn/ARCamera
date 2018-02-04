@@ -2,8 +2,8 @@ package controller;
 
 import com.github.youyinnn.youdbutils.exceptions.AutowiredException;
 import com.github.youyinnn.youdbutils.ioc.YouServiceIocContainer;
+import com.github.youyinnn.youdbutils.utils.YouCollectionsUtils;
 import com.jfinal.core.Controller;
-import com.jfinal.upload.UploadFile;
 import model.User;
 import service.UserService;
 
@@ -28,7 +28,7 @@ public class UserController extends Controller {
 
     public void signup(){
 
-        UploadFile file = getFile();
+        getFile("portrait", "userPortrait");
 
         Long username = getParaToLong("username");
         String password = getPara("password");
@@ -45,9 +45,13 @@ public class UserController extends Controller {
         user.setNickName(nickname);
         user.setSocialAccount(socialAccount);
 
-        service.signUp(user);
+        Integer id = service.signUp(user);
 
-        renderNull();
+        if (id == null) {
+            renderJson(YouCollectionsUtils.getYouHashMap("code",1));
+        } else {
+            renderJson(YouCollectionsUtils.getYouHashMap("code",0,"id",id));
+        }
     }
 
 }
