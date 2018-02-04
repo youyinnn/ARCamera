@@ -28,9 +28,9 @@ public class UserService {
         return id;
     }
 
-    public User login(Integer username, String password) {
+    public User login(Long username, String password) {
         return dao.getUser(YouCollectionsUtils.getYouHashMap("username",username,"password",password),
-                YouCollectionsUtils.getYouArrayList("nickname","username","gender","info","socialAccount"));
+                YouCollectionsUtils.getYouArrayList("id","nickname","username","gender","info","socialAccount"));
     }
 
     public boolean updateUserInfo(Integer id, String nickname, String info, String socialAccount){

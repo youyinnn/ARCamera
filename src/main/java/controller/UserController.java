@@ -1,5 +1,6 @@
 package controller;
 
+import com.alibaba.fastjson.JSON;
 import com.github.youyinnn.youdbutils.exceptions.AutowiredException;
 import com.github.youyinnn.youdbutils.ioc.YouServiceIocContainer;
 import com.github.youyinnn.youdbutils.utils.YouCollectionsUtils;
@@ -42,7 +43,7 @@ public class UserController extends Controller {
         user.setPassword(password);
         user.setGender(gender);
         user.setInfo(info);
-        user.setNickName(nickname);
+        user.setNickname(nickname);
         user.setSocialAccount(socialAccount);
 
         Integer id = service.signUp(user);
@@ -52,6 +53,22 @@ public class UserController extends Controller {
         } else {
             renderJson(YouCollectionsUtils.getYouHashMap("code",0,"id",id));
         }
+    }
+
+    public void login(){
+        Long username = getParaToLong("username");
+        String password = getPara("password");
+
+        User user = service.login(username, password);
+        System.out.println(user);
+
+        if (user == null) {
+            renderJson(YouCollectionsUtils.getYouHashMap("code",1));
+        } else {
+            System.out.println(JSON.toJSONString(YouCollectionsUtils.getYouHashMap("code",0,"userMsg",user)));
+            renderJson(JSON.toJSONString(YouCollectionsUtils.getYouHashMap("code",0,"userMsg",user)));
+        }
+
     }
 
 }

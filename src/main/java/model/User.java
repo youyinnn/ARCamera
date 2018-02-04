@@ -50,11 +50,11 @@ public class User {
         this.password = password;
     }
 
-    public String getNickName() {
+    public String getNickname() {
         return nickname;
     }
 
-    public void setNickName(String nickname) {
+    public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
