@@ -3,6 +3,7 @@ import com.github.youyinnn.youquickjetty.YouJetty;
 import com.jfinal.config.*;
 import com.jfinal.template.Engine;
 import controller.UserController;
+import utils.JWTHelper;
 
 /**
  * @author youyinnn
@@ -16,7 +17,7 @@ public class ProjectStart extends JFinalConfig{
         YouDbManager.signInLog4j2ProxyFilter();
         YouDbManager.scanPackageForModel("model");
         YouDbManager.scanPackageForService("service");
-
+        JWTHelper.initJWTWithHMAC512("youyinnn","youyinnn000");
 
         YouJetty youJetty = YouJetty.initServer(args);
         youJetty.startAndJoin();
