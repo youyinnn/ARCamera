@@ -1,6 +1,6 @@
 package controller;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.youyinnn.youdbutils.exceptions.AutowiredException;
 import com.github.youyinnn.youdbutils.ioc.YouServiceIocContainer;
 import com.github.youyinnn.youdbutils.utils.YouCollectionsUtils;
@@ -9,8 +9,12 @@ import com.jfinal.kit.PathKit;
 import com.jfinal.upload.UploadFile;
 import model.User;
 import service.UserService;
+import utils.JWTHelper;
+import utils.JsonHelper;
 
 import java.io.File;
+import java.time.Instant;
+import java.util.Date;
 
 /**
  * @author youyinnn
@@ -56,9 +60,9 @@ public class UserController extends Controller {
         file.getFile().renameTo(new File(portraitRenamePath));
 
         if (id == null) {
-            renderJson(YouCollectionsUtils.getYouHashMap("code",1));
+            renderJson(JsonHelper.getJSONObjectDeepInPool("user", "fail"));
         } else {
-            renderJson(YouCollectionsUtils.getYouHashMap("code",0,"id",id));
+            renderJson(JsonHelper.getJSONObjectDeepInPool("user","success").put("id", id));
         }
     }
 
@@ -67,12 +71,18 @@ public class UserController extends Controller {
         String password = getPara("password");
 
         User user = service.login(username, password);
-        System.out.println(user);
 
         if (user == null) {
-            renderJson(YouCollectionsUtils.getYouHashMap("code",1));
+            renderJson(JsonHelper.getJSONObjectDeepInPool("user", "fail"));
         } else {
-            renderJson(JSON.toJSONString(YouCollectionsUtils.getYouHashMap("code",0,"userMsg",user)));
+            JWTHelper jwtHelper = new JWTHelper();
+            jwtHelper.setClaim("id",user.getId());
+            jwtHelper.setExpiration(Date.from(Instant.now()));
+            String token = jwtHelper.getToken();
+            JSONObject json
+                    = JsonHelper.getJSONObjectDeepInPool("user", "success");
+            json.putAll(YouCollectionsUtils.getYouHashMap("userMsg", user, "token", token));
+            renderJson(json);
         }
 
     }
@@ -86,9 +96,9 @@ public class UserController extends Controller {
         boolean update = service.updateUserInfo(id, nickname, info, socialAccount);
 
         if (update) {
-            renderJson(YouCollectionsUtils.getYouHashMap("code",0));
+            renderJson(JsonHelper.getJSONObjectDeepInPool("user","success"));
         } else {
-            renderJson(YouCollectionsUtils.getYouHashMap("code",1));
+            renderJson(JsonHelper.getJSONObjectDeepInPool("user","fail"));
         }
     }
 
@@ -99,9 +109,9 @@ public class UserController extends Controller {
         boolean updatePassword = service.updatePassword(id, password);
 
         if (updatePassword) {
-            renderJson(YouCollectionsUtils.getYouHashMap("code",0));
+            renderJson(JsonHelper.getJSONObjectDeepInPool("user","success"));
         } else {
-            renderJson(YouCollectionsUtils.getYouHashMap("code",1));
+            renderJson(JsonHelper.getJSONObjectDeepInPool("user","fail"));
         }
     }
 
@@ -109,8 +119,8 @@ public class UserController extends Controller {
 
         UploadFile newPortrait = getFile("portrait");
 
-        if (newPortrait == null) {
-            renderJson(YouCollectionsUtils.getYouHashMap("code",1));
+        if (newPortrait == null || newPortrait.getFile().length() <= 100) {
+            renderJson(JsonHelper.getJSONObjectDeepInPool("user","fail"));
             return;
         }
 
@@ -121,9 +131,9 @@ public class UserController extends Controller {
 
         if (delete) {
             newPortrait.getFile().renameTo(new File(portraitPath));
-            renderJson(YouCollectionsUtils.getYouHashMap("code",0));
+            renderJson(JsonHelper.getJSONObjectDeepInPool("user","success"));
         } else {
-            renderJson(YouCollectionsUtils.getYouHashMap("code",1));
+            renderJson(JsonHelper.getJSONObjectDeepInPool("user","fail"));
         }
 
     }

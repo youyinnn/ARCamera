@@ -72,7 +72,7 @@ public class JWTHelper {
         builder = JWT.create().withIssuer(issuer);
     }
 
-    public void setClaim(String name, Object value) {
+    public JWTHelper setClaim(String name, Object value) {
         if (value instanceof String) {
             builder.withClaim(name, (String)value);
         } else if (value instanceof Date) {
@@ -86,6 +86,32 @@ public class JWTHelper {
         } else if (value instanceof Boolean) {
             builder.withClaim(name, (Boolean) value);
         }
+        return this;
+    }
+
+    public JWTHelper setAudience(String ... audience) {
+        builder.withAudience(audience);
+        return this;
+    }
+
+    public JWTHelper setSubject(String subject){
+        builder.withSubject(subject);
+        return this;
+    }
+
+    public JWTHelper setExpiration(Date date){
+        builder.withExpiresAt(date);
+        return this;
+    }
+
+    public JWTHelper setNotBefore(Date date){
+        builder.withNotBefore(date);
+        return this;
+    }
+
+    public JWTHelper setIssuedAt(Date date){
+        builder.withIssuedAt(date);
+        return this;
     }
 
     public String getToken(){
@@ -130,15 +156,7 @@ public class JWTHelper {
         JWTHelper.initJWTWithHMAC256("youyinnn","youyinnn");
         JWTHelper jwtHelper = new JWTHelper();
         jwtHelper.setClaim("user","jack");
-        System.out.println(jwtHelper.getToken());
 
-        DecodedJWT decode = JWT.decode(jwtHelper.getToken());
-
-        String signature = decode.getSignature();
-
-        byte[] decode1 = Base64.getDecoder().decode(signature);
-
-        System.out.println(new String(decode1));
 
     }
 }

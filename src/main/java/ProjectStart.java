@@ -1,16 +1,20 @@
 import com.github.youyinnn.youdbutils.YouDbManager;
 import com.github.youyinnn.youquickjetty.YouJetty;
 import com.jfinal.config.*;
+import com.jfinal.kit.PathKit;
 import com.jfinal.template.Engine;
 import controller.UserController;
 import utils.JWTHelper;
+import utils.JsonHelper;
+
+import java.io.IOException;
 
 /**
  * @author youyinnn
  */
 public class ProjectStart extends JFinalConfig{
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         YouDbManager.youDruid.initMySQLDataSource();
         YouDbManager.youLog4j2Filter().setLog4j2FilterWithAllOff(true);
@@ -18,6 +22,7 @@ public class ProjectStart extends JFinalConfig{
         YouDbManager.scanPackageForModel("model");
         YouDbManager.scanPackageForService("service");
         JWTHelper.initJWTWithHMAC512("youyinnn","youyinnn000");
+        JsonHelper.initJsonPool(PathKit.getWebRootPath() + "/src/main/resources/conf/jsonTemplate.json");
 
         YouJetty youJetty = YouJetty.initServer(args);
         youJetty.startAndJoin();
@@ -57,6 +62,6 @@ public class ProjectStart extends JFinalConfig{
 
     @Override
     public void afterJFinalStart() {
-        System.out.println("***");
+
     }
 }

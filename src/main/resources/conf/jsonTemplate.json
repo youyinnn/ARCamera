@@ -1,0 +1,26 @@
+{
+  "user": {
+    "fail": {
+      "code": 1,
+      "msg": "Request fails!"
+    },
+    "success": {
+      "code": 0,
+      "msg": "Request success!"
+    },
+    "resp3": {
+      "code":2,
+      "msg":"Hello3"
+    }
+  },
+  "auth" : {
+    "fail1": {
+      "code": 3,
+      "msg": "Token verify fails!"
+    },
+    "fail2": {
+      "code": 4,
+      "msg": "No Token in request Header!"
+    }
+  }
+}
