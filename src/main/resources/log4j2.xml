@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="off" monitorInterval="300">
     <properties>
-        <property name="LOG_HOME">Log</property>
-        <property name="FILE_NAME">mylog</property>
+        <property name="root">${sys:logRootFilePath}</property>
     </properties>
 
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+            <PatternLayout pattern="[%d{HH:mm:ss.SSS}] [%-5level] - %msg%n" />
         </Console>
 
         <Console
@@ -18,8 +17,41 @@
                 <RegexFilter regex=".* select[\s]1.*" onMatch="DENY" onMismatch="NEUTRAL"/>
                 <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY" />
             </Filters>
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+            <PatternLayout pattern="[%d{HH:mm:ss.SSS}] [%-5level] - %msg%n" />
         </Console>
+
+        <RollingRandomAccessFile name="userOperationLog"
+                                 fileName="${root}/logs/userOP/userop.log"
+                                 filePattern="logs/userOP/$${date:yyyy-MM}/userop-%d{yyyy-MM-dd}-%i.log">
+
+            <PatternLayout pattern="[Time : %d{HH:mm:ss}] [Log Level : %-5level] %n[UserID: %X{id}] [IPAddress : %X{ip}] [Massage : %msg]%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="1 MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="userLoginLog"
+                                 fileName="${root}/logs/userLogin/userlogin.log"
+                                 filePattern="logs/userLogin/$${date:yyyy-MM}/userlogin-%d{yyyy-MM-dd}-%i.log">
+
+            <PatternLayout pattern="[Time : %d{HH:mm:ss}] [Log Level : %-5level] [UserID: %X{id}] [IPAddress : %X{ip}] [Massage : %msg]%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="1 MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="userSignUpLog"
+                                 fileName="${root}/logs/userSignUp/usersignup.log"
+                                 filePattern="logs/userSignUp/$${date:yyyy-MM}/usersignup-%d{yyyy-MM-dd}-%i.log">
+
+            <PatternLayout pattern="[Log Level : %-5level] [Time : %d{HH:mm:ss}]  [UserID: %X{id}] [ %msg ]%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="1 MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
 
     </Appenders>
 
@@ -34,7 +66,22 @@
             <appender-ref ref="sqlConsole"/>
         </Logger>
 
-        <Logger name="com.alibaba.druid.pool.DruidDataSourceStatLoggerImpl" level="info" additivity="false">
+        <Logger name="userOperation" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="userOperationLog" />
+        </Logger>
+
+        <Logger name="userLogin" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="userLoginLog" />
+        </Logger>
+
+        <Logger name="userSignUp" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="userSignUpLog" />
+        </Logger>
+
+        <Logger name="sysLog" level="info" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
     </Loggers>

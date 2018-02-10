@@ -1,5 +1,4 @@
 import com.github.youyinnn.youdbutils.YouDbManager;
-import com.github.youyinnn.youquickjetty.YouJetty;
 import com.jfinal.config.*;
 import com.jfinal.kit.PathKit;
 import com.jfinal.template.Engine;
@@ -14,24 +13,9 @@ import java.io.IOException;
  */
 public class ProjectStart extends JFinalConfig{
 
-    public static void main(String[] args) throws IOException {
-
-        YouDbManager.youDruid.initMySQLDataSource();
-        YouDbManager.youLog4j2Filter().setLog4j2FilterWithAllOff(true);
-        YouDbManager.signInLog4j2ProxyFilter();
-        YouDbManager.scanPackageForModel("model");
-        YouDbManager.scanPackageForService("service");
-        JWTHelper.initJWTWithHMAC512("youyinnn","youyinnn000");
-        JsonHelper.initJsonPool(PathKit.getWebRootPath() + "/src/main/resources/conf/jsonTemplate.json");
-
-        YouJetty youJetty = YouJetty.initServer(args);
-        youJetty.startAndJoin();
-
-    }
-
     @Override
     public void configConstant(Constants me) {
-        me.setDevMode(true);
+        //me.setDevMode(true);
         me.setUrlParaSeparator("&");
     }
 
@@ -62,6 +46,20 @@ public class ProjectStart extends JFinalConfig{
 
     @Override
     public void afterJFinalStart() {
+        System.setProperty("logRootFilePath", PathKit.getWebRootPath().replace("webapp",""));
 
+        YouDbManager.youDruid.initMySQLDataSource();
+        YouDbManager.youLog4j2Filter().setLog4j2FilterWithAllOff();
+        YouDbManager.signInLog4j2ProxyFilter();
+        YouDbManager.scanPackageForModel("model");
+        YouDbManager.scanPackageForService("service");
+        JWTHelper.initJWTWithHMAC512("youyinnn","youyinnn000");
+        try {
+            JsonHelper.initJsonPool(PathKit.getWebRootPath() + "/WEB-INF/classes/conf/jsonTemplate.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.err.println("JFinal Start!");
     }
 }

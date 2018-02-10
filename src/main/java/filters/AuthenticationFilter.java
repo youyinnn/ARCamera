@@ -19,7 +19,7 @@ public class AuthenticationFilter extends BaseHttpFilter {
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
         String token = request.getHeader("token");
-        if (!requestURI.contains("login") && !requestURI.contains("signup")){
+        if (!requestURI.contains("login") && !requestURI.contains("signup") && !"/user".equals(requestURI)){
             if (token != null) {
                 if (JWTHelper.verify(token)) {
                     chain.doFilter(request,response);
