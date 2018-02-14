@@ -15,13 +15,13 @@ public class ProjectStart extends JFinalConfig{
 
     @Override
     public void configConstant(Constants me) {
-        //me.setDevMode(true);
+        me.setDevMode(true);
         me.setUrlParaSeparator("&");
     }
 
     @Override
     public void configRoute(Routes me) {
-        me.add("/user", UserController.class,"/");
+        me.add("/arc/user", UserController.class,"/");
     }
 
     @Override
@@ -46,10 +46,9 @@ public class ProjectStart extends JFinalConfig{
 
     @Override
     public void afterJFinalStart() {
-        System.setProperty("logRootFilePath", PathKit.getWebRootPath().replace("webapp",""));
-
         YouDbManager.youDruid.initMySQLDataSource();
         YouDbManager.youLog4j2Filter().setLog4j2FilterWithAllOff();
+        YouDbManager.signInStatProxyFilter();
         YouDbManager.signInLog4j2ProxyFilter();
         YouDbManager.scanPackageForModel("model");
         YouDbManager.scanPackageForService("service");

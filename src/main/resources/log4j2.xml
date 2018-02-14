@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="off" monitorInterval="300">
     <properties>
-        <property name="root">${sys:logRootFilePath}</property>
+        <property name="root">${sys:user.home}/ARCamera_Logs</property>
     </properties>
 
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%d{HH:mm:ss.SSS}] [%-5level] - %msg%n" />
+            <PatternLayout pattern="[Time: %d{DEFAULT}] [Method: %M] [Level: %-5level] - [Message: %msg]%n" />
         </Console>
 
         <Console
@@ -17,14 +17,14 @@
                 <RegexFilter regex=".* select[\s]1.*" onMatch="DENY" onMismatch="NEUTRAL"/>
                 <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY" />
             </Filters>
-            <PatternLayout pattern="[%d{HH:mm:ss.SSS}] [%-5level] - %msg%n" />
+            <PatternLayout pattern="[Time: %d{DEFAULT}] [Level: %-5level] - [Message: %msg]%n" />
         </Console>
 
         <RollingRandomAccessFile name="userOperationLog"
-                                 fileName="${root}/logs/userOP/userop.log"
-                                 filePattern="logs/userOP/$${date:yyyy-MM}/userop-%d{yyyy-MM-dd}-%i.log">
+                                 fileName="${root}/userOP/userop.log"
+                                 filePattern="${root}/userOP/$${date:yyyy-MM}/userop-%d{yyyy-MM-dd}-%i.log">
 
-            <PatternLayout pattern="[Time : %d{HH:mm:ss}] [Log Level : %-5level] %n[UserID: %X{id}] [IPAddress : %X{ip}] [Massage : %msg]%n" />
+            <PatternLayout pattern="[Time : %d{DEFAULT}] [Log Level : %-5level] %n[UserID: %X{id}] [IPAddress : %X{ip}] [Massage : %msg]%n" />
             <Policies>
                 <TimeBasedTriggeringPolicy />
                 <SizeBasedTriggeringPolicy size="1 MB"/>
@@ -32,10 +32,10 @@
         </RollingRandomAccessFile>
 
         <RollingRandomAccessFile name="userLoginLog"
-                                 fileName="${root}/logs/userLogin/userlogin.log"
-                                 filePattern="logs/userLogin/$${date:yyyy-MM}/userlogin-%d{yyyy-MM-dd}-%i.log">
+                                 fileName="${root}/userLogin/userlogin.log"
+                                 filePattern="${root}/userLogin/$${date:yyyy-MM}/userlogin-%d{yyyy-MM-dd}-%i.log">
 
-            <PatternLayout pattern="[Time : %d{HH:mm:ss}] [Log Level : %-5level] [UserID: %X{id}] [IPAddress : %X{ip}] [Massage : %msg]%n" />
+            <PatternLayout pattern="[Time : %d{DEFAULT}] [Log Level : %-5level] [UserID: %X{id}] [IPAddress : %X{ip}] [Massage : %msg]%n" />
             <Policies>
                 <TimeBasedTriggeringPolicy />
                 <SizeBasedTriggeringPolicy size="1 MB"/>
@@ -43,10 +43,10 @@
         </RollingRandomAccessFile>
 
         <RollingRandomAccessFile name="userSignUpLog"
-                                 fileName="${root}/logs/userSignUp/usersignup.log"
-                                 filePattern="logs/userSignUp/$${date:yyyy-MM}/usersignup-%d{yyyy-MM-dd}-%i.log">
+                                 fileName="${root}/userSignUp/usersignup.log"
+                                 filePattern="${root}/userSignUp/$${date:yyyy-MM}/usersignup-%d{yyyy-MM-dd}-%i.log">
 
-            <PatternLayout pattern="[Log Level : %-5level] [Time : %d{HH:mm:ss}]  [UserID: %X{id}] [ %msg ]%n" />
+            <PatternLayout pattern="[Log Level : %-5level] [Time : %d{DEFAULT}]  [UserID: %X{id}] [ %msg ]%n" />
             <Policies>
                 <TimeBasedTriggeringPolicy />
                 <SizeBasedTriggeringPolicy size="1 MB"/>

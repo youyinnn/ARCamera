@@ -21,7 +21,9 @@ public class AuthenticationFilter extends BaseHttpFilter {
         String token = request.getHeader("token");
         if (!requestURI.contains("login") && !requestURI.contains("signup") && !"/user".equals(requestURI)){
             if (token != null) {
-                if (JWTHelper.verify(token)) {
+                String remoteIP = request.getRemoteAddr();
+                String tokenIP = JWTHelper.getClaimAsString(token, "ip");
+                if (remoteIP.equals(tokenIP) && JWTHelper.verify(token)) {
                     chain.doFilter(request,response);
                 } else {
                     response.setContentType("application/json; charset=utf-8");

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.youyinnn.youdbutils.exceptions.AutowiredException;
 import com.github.youyinnn.youdbutils.ioc.YouServiceIocContainer;
 import com.github.youyinnn.youdbutils.utils.YouCollectionsUtils;
+import com.github.youyinnn.youquickjetty.utils.YouProUtils;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.PathKit;
 import com.jfinal.upload.UploadFile;
@@ -45,7 +46,7 @@ public class UserController extends Controller {
     public void index(){
         System.out.println(PathKit.getWebRootPath());
         System.out.println(PathKit.getRootClassPath());
-
+        YouProUtils.getSystemProperties();
 
         SYSTEM_LOG.info("index");
         renderNull();
@@ -104,7 +105,7 @@ public class UserController extends Controller {
         } else {
             JWTHelper jwtHelper = new JWTHelper();
             jwtHelper.setClaim("id",user.getId());
-            jwtHelper.setClaim("RemoteIP",ip);
+            jwtHelper.setClaim("ip",ip);
             jwtHelper.setIssuedAt(Date.from(Instant.now()));
             String token = jwtHelper.getToken();
             JSONObject json
