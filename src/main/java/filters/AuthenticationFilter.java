@@ -1,8 +1,8 @@
 package filters;
 
-import com.github.youyinnn.youquickjetty.utils.BaseHttpFilter;
-import utils.JWTHelper;
-import utils.JsonHelper;
+import com.github.youyinnn.youwebutils.first.BaseHttpFilter;
+import com.github.youyinnn.youwebutils.second.JsonHelper;
+import com.github.youyinnn.youwebutils.second.JwtHelper;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -22,8 +22,8 @@ public class AuthenticationFilter extends BaseHttpFilter {
         if (!requestURI.contains("login") && !requestURI.contains("signup") && !"/user".equals(requestURI)){
             if (token != null) {
                 String remoteIP = request.getRemoteAddr();
-                String tokenIP = JWTHelper.getClaimAsString(token, "ip");
-                if (remoteIP.equals(tokenIP) && JWTHelper.verify(token)) {
+                String tokenIP = JwtHelper.getClaimAsString(token, "ip");
+                if (remoteIP.equals(tokenIP) && JwtHelper.verify(token)) {
                     chain.doFilter(request,response);
                 } else {
                     response.setContentType("application/json; charset=utf-8");

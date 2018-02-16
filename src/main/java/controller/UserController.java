@@ -4,7 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.youyinnn.youdbutils.exceptions.AutowiredException;
 import com.github.youyinnn.youdbutils.ioc.YouServiceIocContainer;
 import com.github.youyinnn.youdbutils.utils.YouCollectionsUtils;
-import com.github.youyinnn.youquickjetty.utils.YouProUtils;
+import com.github.youyinnn.youwebutils.second.JsonHelper;
+import com.github.youyinnn.youwebutils.second.JwtHelper;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.PathKit;
 import com.jfinal.upload.UploadFile;
@@ -13,8 +14,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 import service.UserService;
-import utils.JWTHelper;
-import utils.JsonHelper;
 
 import java.io.File;
 import java.time.Instant;
@@ -44,9 +43,6 @@ public class UserController extends Controller {
     }
 
     public void index(){
-        System.out.println(PathKit.getWebRootPath());
-        System.out.println(PathKit.getRootClassPath());
-        YouProUtils.getSystemProperties();
 
         SYSTEM_LOG.info("index");
         renderNull();
@@ -103,7 +99,7 @@ public class UserController extends Controller {
             USER_LOGIN_LOG.error("fail");
             renderJson(JsonHelper.getJSONObjectDeepInPool("user", "fail"));
         } else {
-            JWTHelper jwtHelper = new JWTHelper();
+            JwtHelper jwtHelper = new JwtHelper();
             jwtHelper.setClaim("id",user.getId());
             jwtHelper.setClaim("ip",ip);
             jwtHelper.setIssuedAt(Date.from(Instant.now()));

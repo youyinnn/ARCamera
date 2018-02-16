@@ -1,10 +1,10 @@
 import com.github.youyinnn.youdbutils.YouDbManager;
+import com.github.youyinnn.youwebutils.second.JsonHelper;
+import com.github.youyinnn.youwebutils.second.JwtHelper;
 import com.jfinal.config.*;
 import com.jfinal.kit.PathKit;
 import com.jfinal.template.Engine;
 import controller.UserController;
-import utils.JWTHelper;
-import utils.JsonHelper;
 
 import java.io.IOException;
 
@@ -52,7 +52,7 @@ public class ProjectStart extends JFinalConfig{
         YouDbManager.signInLog4j2ProxyFilter();
         YouDbManager.scanPackageForModel("model");
         YouDbManager.scanPackageForService("service");
-        JWTHelper.initJWTWithHMAC512("youyinnn","youyinnn000");
+        JwtHelper.initJWTWithHMAC512("youyinnn","youyinnn000");
         try {
             JsonHelper.initJsonPool(PathKit.getWebRootPath() + "/WEB-INF/classes/conf/jsonTemplate.json");
         } catch (IOException e) {
@@ -60,5 +60,10 @@ public class ProjectStart extends JFinalConfig{
         }
 
         System.err.println("JFinal Start!");
+    }
+
+    @Override
+    public void beforeJFinalStop() {
+        System.err.println("JFinal Stop!");
     }
 }
