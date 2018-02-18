@@ -3,6 +3,7 @@ import com.github.youyinnn.youwebutils.second.JsonHelper;
 import com.github.youyinnn.youwebutils.second.JwtHelper;
 import com.jfinal.config.*;
 import com.jfinal.kit.PathKit;
+import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.template.Engine;
 import controller.UserController;
 
@@ -21,7 +22,7 @@ public class ProjectStart extends JFinalConfig{
 
     @Override
     public void configRoute(Routes me) {
-        me.add("/arc/user", UserController.class,"/");
+        me.add("/user", UserController.class,"/");
     }
 
     @Override
@@ -41,7 +42,7 @@ public class ProjectStart extends JFinalConfig{
 
     @Override
     public void configHandler(Handlers me) {
-
+        me.add(new DruidStatViewHandler("/druid"));
     }
 
     @Override
