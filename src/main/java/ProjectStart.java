@@ -1,4 +1,5 @@
 import com.github.youyinnn.youdbutils.YouDbManager;
+import com.github.youyinnn.youdbutils.exceptions.Log4j2FilterException;
 import com.github.youyinnn.youwebutils.second.JsonHelper;
 import com.github.youyinnn.youwebutils.second.JwtHelper;
 import com.jfinal.config.*;
@@ -48,9 +49,13 @@ public class ProjectStart extends JFinalConfig{
     @Override
     public void afterJFinalStart() {
         YouDbManager.youDruid.initMySQLDataSource();
-        YouDbManager.youLog4j2Filter().setLog4j2FilterWithAllOff();
         YouDbManager.signInStatProxyFilter();
-        YouDbManager.signInLog4j2ProxyFilter();
+        try {
+            YouDbManager.youLog4j2Filter().setLog4j2FilterWithAllOff();
+            YouDbManager.signInLog4j2ProxyFilter();
+        } catch (Log4j2FilterException e) {
+            e.printStackTrace();
+        }
         YouDbManager.scanPackageForModel("model");
         YouDbManager.scanPackageForService("service");
         JwtHelper.initJWTWithHMAC512("youyinnn","youyinnn000");
