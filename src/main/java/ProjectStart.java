@@ -1,5 +1,9 @@
 import com.github.youyinnn.youdbutils.YouDbManager;
-import com.github.youyinnn.youdbutils.exceptions.Log4j2FilterException;
+import com.github.youyinnn.youdbutils.druid.YouDruid;
+import com.github.youyinnn.youdbutils.druid.filter.YouLog4j2FilterConfig;
+import com.github.youyinnn.youdbutils.druid.filter.YouStatFilterConfig;
+import com.github.youyinnn.youdbutils.exceptions.DataSourceInitException;
+import com.github.youyinnn.youdbutils.exceptions.YouDbManagerException;
 import com.github.youyinnn.youwebutils.second.JsonHelper;
 import com.github.youyinnn.youwebutils.second.JwtHelper;
 import com.jfinal.config.*;
@@ -48,16 +52,15 @@ public class ProjectStart extends JFinalConfig{
 
     @Override
     public void afterJFinalStart() {
-        YouDbManager.youDruid.initMySQLDataSource();
-        YouDbManager.signInStatProxyFilter();
+        YouLog4j2FilterConfig log4j2FilterConfig = new YouLog4j2FilterConfig();
+        log4j2FilterConfig.enableStatementExecutableSqlLog();
+        YouStatFilterConfig statFilterConfig = new YouStatFilterConfig();
         try {
-            YouDbManager.youLog4j2Filter().setLog4j2FilterWithAllOff();
-            YouDbManager.signInLog4j2ProxyFilter();
-        } catch (Log4j2FilterException e) {
+            YouDbManager.signInYouDruid(YouDruid.initMySQLDataSource("a", true, log4j2FilterConfig, statFilterConfig));
+            YouDbManager.scanPackageForModelAndService("model", "service", "a");
+        } catch (DataSourceInitException | YouDbManagerException e) {
             e.printStackTrace();
         }
-        YouDbManager.scanPackageForModel("model");
-        YouDbManager.scanPackageForService("service");
         JwtHelper.initJWTWithHMAC512("youyinnn","youyinnn000");
         try {
             JsonHelper.initJsonPool(PathKit.getWebRootPath() + "/WEB-INF/classes/conf/jsonTemplate.json");
@@ -65,7 +68,6 @@ public class ProjectStart extends JFinalConfig{
             e.printStackTrace();
         }
 
-        System.err.println("JFinal Start!");
     }
 
     @Override

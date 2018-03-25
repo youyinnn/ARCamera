@@ -2,7 +2,7 @@ package dao;
 
 import com.github.youyinnn.youdbutils.dao.YouDao;
 import com.github.youyinnn.youdbutils.exceptions.NoneffectiveUpdateExecuteException;
-import com.github.youyinnn.youdbutils.utils.YouCollectionsUtils;
+import com.github.youyinnn.youwebutils.third.YouCollectionsUtils;
 import model.User;
 
 import java.util.ArrayList;

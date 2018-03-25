@@ -3,14 +3,14 @@ package service;
 import com.github.youyinnn.youdbutils.exceptions.NoneffectiveUpdateExecuteException;
 import com.github.youyinnn.youdbutils.ioc.annotations.Autowired;
 import com.github.youyinnn.youdbutils.ioc.annotations.YouService;
-import com.github.youyinnn.youdbutils.utils.YouCollectionsUtils;
+import com.github.youyinnn.youwebutils.third.YouCollectionsUtils;
 import dao.UserDao;
 import model.User;
 
 /**
  * @author youyinnn
  */
-@YouService
+@YouService(dataSourceName = "a")
 public class UserService {
 
     @Autowired
