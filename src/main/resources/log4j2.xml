@@ -57,10 +57,6 @@
 
 
     <Loggers>
-        <Root level="info">
-            <AppenderRef ref="Console" />
-        </Root>
-
         <!-- druid配置 -->
         <Logger name="druid.sql.Statement" level="debug" additivity="false">
             <appender-ref ref="sqlConsole"/>

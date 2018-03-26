@@ -19,6 +19,24 @@ import java.io.IOException;
  */
 public class ProjectStart extends JFinalConfig{
 
+    static {
+        YouLog4j2FilterConfig log4j2FilterConfig = new YouLog4j2FilterConfig();
+        log4j2FilterConfig.enableStatementExecutableSqlLog();
+        YouStatFilterConfig statFilterConfig = new YouStatFilterConfig();
+        try {
+            YouDbManager.signInYouDruid(YouDruid.initMySQLDataSource("a", true, log4j2FilterConfig, statFilterConfig));
+            YouDbManager.scanPackageForModelAndService("model", "service", "a");
+        } catch (DataSourceInitException | YouDbManagerException e) {
+            e.printStackTrace();
+        }
+        JwtHelper.initJWTWithHMAC512("youyinnn","youyinnn000");
+        try {
+            JsonHelper.initJsonPool(PathKit.getWebRootPath() + "/WEB-INF/classes/conf/jsonTemplate.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void configConstant(Constants me) {
         me.setDevMode(true);
@@ -52,22 +70,7 @@ public class ProjectStart extends JFinalConfig{
 
     @Override
     public void afterJFinalStart() {
-        YouLog4j2FilterConfig log4j2FilterConfig = new YouLog4j2FilterConfig();
-        log4j2FilterConfig.enableStatementExecutableSqlLog();
-        YouStatFilterConfig statFilterConfig = new YouStatFilterConfig();
-        try {
-            YouDbManager.signInYouDruid(YouDruid.initMySQLDataSource("a", true, log4j2FilterConfig, statFilterConfig));
-            YouDbManager.scanPackageForModelAndService("model", "service", "a");
-        } catch (DataSourceInitException | YouDbManagerException e) {
-            e.printStackTrace();
-        }
-        JwtHelper.initJWTWithHMAC512("youyinnn","youyinnn000");
-        try {
-            JsonHelper.initJsonPool(PathKit.getWebRootPath() + "/WEB-INF/classes/conf/jsonTemplate.json");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        System.err.println("JFinal Start!");
     }
 
     @Override
