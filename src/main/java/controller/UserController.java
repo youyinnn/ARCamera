@@ -5,12 +5,12 @@ import com.github.youyinnn.youdbutils.exceptions.AutowiredException;
 import com.github.youyinnn.youdbutils.ioc.YouServiceIocContainer;
 import com.github.youyinnn.youwebutils.second.JsonHelper;
 import com.github.youyinnn.youwebutils.second.JwtHelper;
+import com.github.youyinnn.youwebutils.third.Log4j2Helper;
 import com.github.youyinnn.youwebutils.third.YouCollectionsUtils;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.PathKit;
 import com.jfinal.upload.UploadFile;
 import model.User;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 import service.UserService;
@@ -26,13 +26,13 @@ public class UserController extends Controller {
 
     private static UserService service;
 
-    private static final Logger USER_OP_LOG = LogManager.getLogger("userOperation");
+    private static final Logger USER_OP_LOG = Log4j2Helper.getLogger("userOperation");
 
-    private static final Logger USER_LOGIN_LOG = LogManager.getLogger("userLogin");
+    private static final Logger USER_LOGIN_LOG = Log4j2Helper.getLogger("userLogin");
 
-    private static final Logger USER_SIGNUP_LOG = LogManager.getLogger("userSignUp");
+    private static final Logger USER_SIGNUP_LOG = Log4j2Helper.getLogger("userSignUp");
 
-    private static final Logger SYSTEM_LOG = LogManager.getLogger("sysLog");
+    private static final Logger SYSTEM_LOG = Log4j2Helper.getLogger("sysLog");
 
     static {
         try {
